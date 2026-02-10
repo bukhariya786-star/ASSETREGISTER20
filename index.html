@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bukhariya Assets - One Page Image Download</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Manjari:wght@400;700&family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #003366;
+            --secondary: #0066cc;
+            --accent: #f4f9ff;
+            --danger: #d9534f;
+            --success: #28a745;
+            --text: #333;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #eef2f7;
+            margin: 0;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .search-card {
+            background: white;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 550px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+        }
+
+        input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #ced4da;
+            border-radius: 10px;
+            font-size: 16px;
+            margin-bottom: 12px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        .btns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-go { background: var(--secondary); }
+        .btn-new { background: var(--danger); }
+        .btn-save { 
+            background: var(--success); 
+            width: 100%; 
+            max-width: 600px; 
+            margin-bottom: 20px;
+            display: none; 
+        }
+
+        /* A4 Page Layout - High Quality Image Area */
+        #a4-page {
+            width: 210mm;
+            background: white;
+            display: none;
+            box-sizing: border-box;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+            margin-bottom: 30px;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .header {
+            text-align: center;
+            border-bottom: 5px solid var(--primary);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+
+        .header h1 { margin: 0; color: var(--primary); font-size: 32px; font-weight: 800; }
+        .header p { margin: 5px 0 0; color: #555; font-weight: 700; font-size: 18px; text-transform: uppercase; }
+
+        .id-strip {
+            background: var(--primary);
+            color: white;
+            padding: 15px 25px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        .grid-data {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+
+        .info-box {
+            background: var(--accent);
+            padding: 12px 18px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            border: 1px solid #d1e3f8;
+            border-left: 6px solid var(--secondary);
+        }
+
+        .icon-box {
+            width: 38px;
+            height: 38px;
+            background: white;
+            color: var(--secondary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-size: 16px;
+            flex-shrink: 0;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .label-key { font-size: 11px; color: #666; font-weight: 800; text-transform: uppercase; line-height: 1.2; }
+        .label-val { font-size: 15px; color: var(--text); font-weight: 700; margin-top: 2px; }
+
+        .remarks-container {
+            margin-top: 30px;
+            padding: 20px;
+            background: #fffafa;
+            border: 2px dashed #ffc1c1;
+            border-radius: 15px;
+        }
+
+        .rem-head { color: #b22222; font-weight: 800; font-size: 16px; margin-bottom: 8px; display: block; }
+        .rem-text { font-family: 'Manjari', sans-serif; font-size: 19px; color: #444; line-height: 1.6; }
+
+        .footer {
+            margin-top: 40px;
+            border-top: 2px solid #eee;
+            padding-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #999;
+            font-weight: 700;
+        }
+
+        /* Responsive View for Screen */
+        @media screen and (max-width: 210mm) {
+            #a4-page { width: 100%; max-width: 650px; }
+            .grid-data { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="search-card">
+        <h2 style="text-align: center; color: var(--primary); margin: 0 0 15px 0;">BUKHARIYA ASSET REGISTER</h2>
+        <div class="input-row">
+            <input type="text" id="assetInput" placeholder="Enter Asset ID...">
+            <div class="btns">
+                <button class="btn-go" onclick="searchAsset()">
+                    <i class="fas fa-search"></i> Search
+                </button>
+                <button class="btn-new" onclick="resetPage()">
+                    <i class="fas fa-sync-alt"></i> New Search
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <button id="downloadBtn" class="btn-save" onclick="downloadImage()">
+        <i class="fas fa-file-image"></i> Download One A4 Page Image (JPG)
+    </button>
+
+    <div id="a4-page">
+        <div class="content" id="capture-area">
+            <div class="header">
+                <h1>BUKHARIYA EDUCATIONAL CENTRE</h1>
+                <p>INSTITUTION ASSET REGISTER REPORT</p>
+            </div>
+
+            <div class="id-strip">
+                <span id="res-ID" style="font-weight: 800; font-size: 22px;"></span>
+                <span id="res-Stat" style="background: rgba(255,255,255,0.2); padding: 4px 15px; border-radius: 20px;"></span>
+            </div>
+
+            <div class="grid-data" id="res-List"></div>
+
+            <div class="remarks-container">
+                <span class="rem-head"><i class="fas fa-comment-dots"></i> REMARKS</span>
+                <div class="rem-text" id="res-Rem"></div>
+            </div>
+
+            <div class="footer">
+                <span>Official Asset Management Record</span>
+                <span id="res-Time"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sheetUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQHQAEtX0eMrBK5qnGcdthpIWdIKlM4pcy0En0DhXhX1MRSBAML6t2c9r1V_7hQRAQHMVOMRRmTrDQc/pub?gid=459295878&single=true&output=tsv';
+
+        async function searchAsset() {
+            const id = document.getElementById('assetInput').value.trim().toUpperCase();
+            if (!id) return;
+
+            try {
+                const res = await fetch(sheetUrl);
+                const data = await res.text();
+                const rows = data.split('\n').map(r => r.split('\t'));
+                const hdrs = rows[0].map(h => h.trim());
+                const match = rows.find(r => r[1] && r[1].trim().toUpperCase() === id);
+
+                if (match) {
+                    renderResult(hdrs, match);
+                } else {
+                    alert("Asset ID not found!");
+                }
+            } catch (err) {
+                alert("Connection Error!");
+            }
+        }
+
+        function renderResult(hdrs, row) {
+            const list = document.getElementById('res-List');
+            list.innerHTML = '';
+
+            const icons = {
+                "Sl No": "hashtag", "Asset Name": "box", "Category": "tags", "Description": "file-alt",
+                "Quantity": "clone", "Purchase Date": "calendar-alt", "Purchase Value": "wallet",
+                "Vendor": "store", "Invoice No": "receipt", "Warranty": "shield-alt",
+                "Warranty Expiry": "clock", "Location": "map-marker-alt", "Department": "building",
+                "Assigned To": "user-check", "Condition": "heartbeat", "Depreciation %": "percentage",
+                "Current Value": "money-bill-wave", "Last Service Date": "tools", "Next Service Date": "calendar-plus"
+            };
+
+            row.forEach((val, i) => {
+                const label = hdrs[i];
+                if (!label || ["Asset ID", "Status", "Remarks"].includes(label)) return;
+
+                const box = document.createElement('div');
+                box.className = 'info-box';
+                box.innerHTML = `
+                    <div class="icon-box"><i class="fas fa-${icons[label] || 'circle'}"></i></div>
+                    <div style="display: flex; flex-direction: column;">
+                        <span class="label-key">${label}</span>
+                        <span class="label-val">${val || '---'}</span>
+                    </div>
+                `;
+                list.appendChild(box);
+            });
+
+            document.getElementById('res-ID').innerText = "ASSET ID: " + row[1];
+            document.getElementById('res-Stat').innerText = row[20] || "Active";
+            document.getElementById('res-Rem').innerText = row[21] || "No Remarks Found";
+            document.getElementById('res-Time').innerText = "Generated: " + new Date().toLocaleString();
+
+            document.getElementById('a4-page').style.display = 'block';
+            document.getElementById('downloadBtn').style.display = 'block';
+            
+            // Scroll to view
+            window.scrollTo({ top: document.getElementById('a4-page').offsetTop, behavior: 'smooth' });
+        }
+
+        function resetPage() {
+            document.getElementById('assetInput').value = '';
+            document.getElementById('a4-page').style.display = 'none';
+            document.getElementById('downloadBtn').style.display = 'none';
+        }
+
+        function downloadImage() {
+            const captureArea = document.getElementById('capture-area');
+            const idText = document.getElementById('res-ID').innerText;
+            
+            // High scale for A4 print quality
+            html2canvas(captureArea, { 
+                scale: 3, 
+                useCORS: true,
+                backgroundColor: "#ffffff"
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `Asset_Details_${idText.replace('ASSET ID: ', '')}.jpg`;
+                link.href = canvas.toDataURL("image/jpeg", 0.9);
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
